@@ -57,10 +57,6 @@ externalPort = 80
 localPort = 6379
 externalPort = 3000
 
-[[ports]]
-localPort = 40071
-externalPort = 3001
-
 [deployment]
 deploymentTarget = "vm"
 run = ["bash", "-c", "redis-server --daemonize yes && cd backend && node server.js & cd frontend && npm run build && npx serve -s dist -l 5000"]
