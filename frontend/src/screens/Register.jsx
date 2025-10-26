@@ -17,16 +17,30 @@ const Register = () => {
 
         e.preventDefault()
 
+        console.log('📝 [REGISTER FORM] Submitting registration...', { email });
+
         axios.post('/users/register', {
             email,
             password
         }).then((res) => {
-            console.log(res.data)
-            localStorage.setItem('token', res.data.token)
-            setUser(res.data.user)
-            navigate('/')
+            console.log('✅ [REGISTER FORM] Registration successful!', res.data);
+            localStorage.setItem('token', res.data.token);
+            console.log('💾 [REGISTER FORM] Token saved to localStorage');
+            setUser(res.data.user);
+            console.log('👤 [REGISTER FORM] User context updated');
+            navigate('/');
         }).catch((err) => {
-            console.log(err.response.data)
+            console.error('❌ [REGISTER FORM] Registration error:', err);
+            if (err.response) {
+                console.log('📋 [REGISTER FORM] Server error response:', err.response.data);
+                alert(err.response.data.message || 'Registration failed');
+            } else if (err.request) {
+                console.log('⚠️ [REGISTER FORM] No response from server');
+                alert('Cannot connect to server. Please check your connection.');
+            } else {
+                console.log('⚠️ [REGISTER FORM] Error:', err.message);
+                alert('An error occurred: ' + err.message);
+            }
         })
     }
 
@@ -51,7 +65,7 @@ const Register = () => {
                     <div className="mb-6">
                         <label className="block text-gray-400 mb-2" htmlFor="password">Password</label>
                         <input
-                            onChange={(e) => setPassword(e.target.value)} s
+                            onChange={(e) => setPassword(e.target.value)}
                             type="password"
                             id="password"
                             className="w-full p-3 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"

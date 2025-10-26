@@ -17,18 +17,32 @@ const Login = () => {
 
         e.preventDefault()
 
+        console.log('🔐 [LOGIN FORM] Submitting login...', { email });
+
         axios.post('/users/login', {
             email,
             password
         }).then((res) => {
-            console.log(res.data)
+            console.log('✅ [LOGIN FORM] Login successful!', res.data);
 
-            localStorage.setItem('token', res.data.token)
-            setUser(res.data.user)
+            localStorage.setItem('token', res.data.token);
+            console.log('💾 [LOGIN FORM] Token saved to localStorage');
+            setUser(res.data.user);
+            console.log('👤 [LOGIN FORM] User context updated');
 
-            navigate('/')
+            navigate('/');
         }).catch((err) => {
-            console.log(err.response.data)
+            console.error('❌ [LOGIN FORM] Login error:', err);
+            if (err.response) {
+                console.log('📋 [LOGIN FORM] Server error response:', err.response.data);
+                alert(err.response.data.message || 'Login failed');
+            } else if (err.request) {
+                console.log('⚠️ [LOGIN FORM] No response from server');
+                alert('Cannot connect to server. Please check your connection.');
+            } else {
+                console.log('⚠️ [LOGIN FORM] Error:', err.message);
+                alert('An error occurred: ' + err.message);
+            }
         })
     }
 
